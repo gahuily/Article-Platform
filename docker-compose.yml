@@ -32,5 +32,22 @@ services:
       - DB_PASSWORD=password123
       - DB_PORT=5432
 
+  # 3. 프론트엔드: Vite (개발용)
+  frontend:
+    image: node:22
+    container_name: ssafy_frontend
+    working_dir: /app
+    volumes:
+      - ./frontend/vue-project:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - BROWSER=none
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
