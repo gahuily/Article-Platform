@@ -1,0 +1,6 @@
+Django>=4.2,<5.0
+djangorestframework
+drf-spectacular          # Swagger 문서 자동화
+django-cors-headers      # ★ 프론트엔드 연동 시 필수
+psycopg2-binary          # PostgreSQL 연동
+gunicorn                 # 배포용 서버 (Docker용)
