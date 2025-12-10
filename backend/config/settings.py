@@ -48,11 +48,19 @@ INSTALLED_APPS = [
     # 2. Local Apps
     'articles',             # 뉴스(기사) 관리
     'accounts',             # 회원 관리
+
+    # 인증 관련 라이브러리
+    'rest_framework.authtoken', # 토큰 관리
+    'dj_rest_auth',             # 로그인/로그아웃 API
+    'django.contrib.sites',     # allauth 필수 의존성
+    'allauth',                  # 회원가입 관리
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration', # 회원가입 API
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -60,6 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -146,7 +155,17 @@ AUTH_USER_MODEL = 'accounts.User'
 # CORS 설정 (개발 중에는 모든 오리진 허용)
 CORS_ALLOW_ALL_ORIGINS = True
 
+# 추가 설정
+SITE_ID = 1  # django.contrib.sites 필수 설정
+
 # Swagger 설정
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication', # 토큰 인증
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
+
+# 이메일 인증 끄기 (개발용 편의 설정)
+ACCOUNT_EMAIL_VERIFICATION = 'none'
