@@ -6,3 +6,4 @@ psycopg2-binary          # PostgreSQL 연동
 gunicorn                 # 배포용 서버 (Docker용)
 dj-rest-auth
 django-allauth
+requests
