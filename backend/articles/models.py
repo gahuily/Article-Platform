@@ -25,37 +25,31 @@ class Article(models.Model):
     def __str__(self):
         return f"[{self.get_category_display()}] {self.title}"
 
-class UserLike(models.Model):
-    """사용자가 기사에 '좋아요'를 누른 기록"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likes')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='liked_by')
-    liked_at = models.DateTimeField(auto_now_add=True)
+class Interaction(models.Model):
+    INTERACTION_TYPES = [
+        ('LIKE', '좋아요'),
+        ('READ', '읽음 (클릭)'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='interactions')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='interactions')
+    
+    type = models.CharField(max_length=10, choices=INTERACTION_TYPES)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user', 'article')
-        ordering = ['-liked_at']
+        ordering = ['-created_at']
+        # (선택사항) 한 유저가 한 기사에 대해 같은 행동 중복 방지하고 싶다면 추가
+        # unique_together = ('user', 'article', 'type') 
 
     def __str__(self):
-        return f"{self.user} liked {self.article.title}"
-
-class UserReadHistory(models.Model):
-    """사용자가 기사를 읽은 기록"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='read_history')
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='read_by')
-    read_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'article')
-        ordering = ['-read_at']
-
-    def __str__(self):
-        return f"{self.user} read {self.article.title}"
+        return f"{self.user} {self.type} {self.article.title}"
 
 class DailyReport(models.Model):
-    """배치 파이프라인(Airflow)의 결과 리포트"""
+    # 배치 파이프라인(Airflow)의 결과 리포트
     report_date = models.DateField(unique=True)
-    total_articles_collected = models.IntegerField(help_text="HDFS 로그 기반 배치 분석 결과")
-    top_keyword_1 = models.CharField(max_length=100, blank=True, help_text="가장 많이 언급된 키워드 (HDFS 기반)")
+    total_articles_collected = models.IntegerField()
+    top_keyword_1 = models.CharField(max_length=100, blank=True)
     top_keyword_2 = models.CharField(max_length=100, blank=True)
     top_keyword_3 = models.CharField(max_length=100, blank=True)
     generated_at = models.DateTimeField(auto_now_add=True)
