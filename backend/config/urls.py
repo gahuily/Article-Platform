@@ -20,9 +20,12 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
     # API 주소 (v1 버전)
     path('api/v1/', include('articles.urls')),
+
+    # 인증 관련 URL
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),                # 로그인/로그아웃
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')), # 회원가입
     
     # Swagger (API 문서) 접속 주소
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
