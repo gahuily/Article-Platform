@@ -148,5 +148,5 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Swagger 설정
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.opneapi.AutoSchema'
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
 }
