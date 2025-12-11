@@ -3,12 +3,13 @@ from django.conf import settings
 
 class Article(models.Model):
     CATEGORY_CHOICES = [
-        ('IT', 'IT/테크'),
-        ('ECONOMY', '경제/금융'), 
-        ('SOCIETY', '환경/사회'),
+        ('POLITICS', '정치'),
+        ('ECONOMY', '경제'), 
+        ('SOCIETY', '사회'),
+        ('INTERNATIONAL', '국제'),
         ('SPORTS', '스포츠'), 
-        ('LIFE', '생활'), 
-        ('CULTURE', '문화/예술'),
+        ('CULTURE', '생활/문화'),
+        ('ENTERTAINMENT', '연예'),
     ]
 
     title = models.CharField(max_length=200)
